@@ -11,3 +11,5 @@ The AS3 declaration is used to creat an application with:
 -An associated ASM Policy called My_ASM_Policy created from the XML file sample_blocking_rdp_policy.xml.  
 -A logging profile defined in the AS3 declaration to send traffic to and ELK server (sample 10.45.0.79:5244).  
 
+The Logstash configuration to process the BIG-IP WAF logs is in the big-ip_logstash_waf_10.conf file.  
+
