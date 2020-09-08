@@ -1,0 +1,69 @@
+{
+  "class": "ADC",
+  "schemaVersion": "3.2.0",
+  "label": "ASM_policy_external_URL",
+  "remark": "ASM_policy_external_URL",
+  "Sample_app_sec_02": {
+    "class": "Tenant",
+    "HTTP_Service": {
+      "class": "Application",
+      "service": {
+        "class": "Service_HTTP",
+        "virtualAddresses": [
+          "10.43.0.150"
+        ],
+        "securityLogProfiles": [ 
+            {
+            "use": "secLogRemote"
+            }
+        ],
+        "snat": "auto",
+        "pool": "Pool1",
+        "policyWAF": {
+          "use": "My_ASM_Policy"
+        }
+      },
+      "Pool1": {
+        "class": "Pool",
+        "monitors": [
+          "http"
+        ],
+        "members": [
+          {
+            "servicePort": 8000,
+            "serverAddresses": [
+              "10.43.0.82"
+            ]
+          },
+          {
+            "servicePort": 8001,
+            "serverAddresses": [
+              "10.43.0.82"
+            ]
+          }
+        ]
+      },
+      "My_ASM_Policy": {
+        "class": "WAF_Policy",
+        "url": "https://raw.githubusercontent.com/romain-f5/big-ip_asm_elk_integration/master/sample_blocking_rdp_waf_policy.xml",
+        "ignoreChanges": true
+      },
+      "secLogRemote": {
+        "class": "Security_Log_Profile",
+        "application": {
+          "localStorage": false,
+          "maxEntryLength": "10k",
+          "protocol": "tcp",
+          "remoteStorage": "splunk",
+          "reportAnomaliesEnabled": true,
+          "servers": [
+            {
+              "address": "10.45.0.79",
+              "port": "5244"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
